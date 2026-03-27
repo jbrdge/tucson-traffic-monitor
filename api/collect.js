@@ -3,6 +3,7 @@
 // Fetches live traffic for all intersections and writes to Supabase
 
 const TOMTOM_BASE_URL = 'https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json';
+const TOMTOM_API_KEY = process.env.TOMTOM_API_KEY;
 
 // The intersections we are tracking with their coordinates
 const INTERSECTIONS = [
@@ -29,14 +30,28 @@ const INTERSECTIONS = [
 ];
 
 async function fetchTrafficData(intersection) {
-  // TODO: build the TomTom API URL using intersection.lat and intersection.lng
-  // TODO: make the API call using fetch()
-  // TODO: extract currentSpeed and freeFlowSpeed from the response
-  // TODO: return { name, currentSpeed, freeFlowSpeed }
+  // fetches current speed and free flow speed from TOMTOM API  
+  // fetch reference page: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+
+  const API_URL = `${TOMTOM_BASE_URL}?point=${intersection.lat},${intersection.lng}&key=${TOMTOM_API_KEY}`;
+
+  try {
+      const response = await fetch(API_URL);
+      if (!response.ok) {
+          throw new Error(`Response status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      const { currentSpeed, freeFlowSpeed } = result.flowSegmentData
+      return { name: intersection.name, currentSpeed, freeFlowSpeed} 
+  } catch (error) {
+    console.error(error.message);
+  }
 }
 
 function calculateCongestionScore(currentSpeed, freeFlowSpeed) {
-  // TODO: return currentSpeed / freeFlowSpeed rounded to 4 decimal places
+  // return currentSpeed / freeFlowSpeed rounded to 4 decimal places
+  return(parseFloat((currentSpeed/freeFlowSpeed).toFixed(4)));
 }
 
 async function writeToSupabase(reading) {
