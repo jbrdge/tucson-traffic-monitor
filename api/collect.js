@@ -1,10 +1,10 @@
 // collect.js
 // Responsibility: Called by cron job every 15 minutes
 // Fetches live traffic for all intersections and writes to Supabase
+import { createClient } from '@supabase/supabase-js';
 
 const TOMTOM_BASE_URL = 'https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json';
 const TOMTOM_API_KEY = process.env.TOMTOM_API_KEY;
-import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -79,4 +79,8 @@ export default async function handler(req, res) {
   // TODO: calculateCongestionScore
   // TODO: writeToSupabase
   // TODO: return a summary of what was collected
+  for (const intersection of INTERSECTIONS) {
+    const reading = fetchTrafficData(intersection);
+    writeToSupabase(reading)
+  }
 }
