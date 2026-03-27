@@ -1,5 +1,5 @@
 // The intersections we are tracking with their coordinates
-const INTERSECTIONS = [
+export const INTERSECTIONS = [
   { name: 'Speedway & Swan', lat: 32.2362, lng: -110.8926 },
   { name: 'Speedway & Mountain', lat: 32.2360, lng: -110.9524 },
   { name: '6th & Euclid', lat: 32.2278, lng: -110.9595 },
