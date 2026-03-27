@@ -4,6 +4,12 @@
 
 const TOMTOM_BASE_URL = 'https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json';
 const TOMTOM_API_KEY = process.env.TOMTOM_API_KEY;
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+);
 
 // The intersections we are tracking with their coordinates
 const INTERSECTIONS = [
@@ -55,8 +61,16 @@ function calculateCongestionScore(currentSpeed, freeFlowSpeed) {
 }
 
 async function writeToSupabase(reading) {
-  // TODO: insert one row into tucson_traffic table
-  // reading will contain { name, currentSpeed, freeFlowSpeed, congestionScore }
+  const { error } = await supabase
+    .from('tucson_traffic')
+    .insert({ 
+      intersection: reading.name, 
+      current_speed: reading.currentSpeed,
+      free_flow_speed: reading.freeFlowSpeed,
+      congestion_score: calculateCongestionScore(reading.currentSpeed, reading.freeFlowSpeed)
+    });
+
+  if (error) throw new Error(`Supabase error: ${error.message}`);
 }
 
 export default async function handler(req, res) {
