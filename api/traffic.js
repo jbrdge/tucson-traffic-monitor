@@ -20,3 +20,20 @@ async function getFromSupabase(intersection) {
     return data[0]; // data is an array, you want the first (most recent) row
 
 }
+
+
+
+export default async function handler(req, res) {
+    const results = [];
+    try {
+        for (const intersection of INTERSECTIONS) {
+            const reading = await getFromSupabase(intersection);
+            if (reading) {
+            results.push(reading);
+            }
+        }
+        res.status(200).json(results);
+    } catch (err) {
+        res.status(500).json({ status: 'error', message: err.message });
+    }
+}
