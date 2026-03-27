@@ -15,9 +15,7 @@ export const INTERSECTIONS = [
   { name: 'Rita & Houghton', lat: 32.1027, lng: -110.7730 },
   { name: 'Valencia & Midvale Park', lat: 32.1338, lng: -110.9991 },
   { name: 'St. Marys & Silverbell', lat: 32.2289, lng: -110.9988},
-  { name: 'Gates Pass & Camino De Oeste', lat: 32.2356, lng: -111.0627 },
   { name: 'Marana & Sandario', lat: 32.4606, lng: -111.2170 },
   { name: 'Sunrise & Sabino Canyon', lat: 32.3089, lng: -110.8241},
-  { name: 'Sweetwater & Benan Venture', lat: 32.2799, lng: -111.01997},
-  { name: 'Soldier Trail & Roger', lat: 32.2796, lng: -110.7381}
+  { name: 'Sweetwater & Benan Venture', lat: 32.2799, lng: -111.01997}
 ];
