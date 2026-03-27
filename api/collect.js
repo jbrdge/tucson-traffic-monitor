@@ -74,13 +74,13 @@ async function writeToSupabase(reading) {
 }
 
 export default async function handler(req, res) {
-  // TODO: loop through all INTERSECTIONS
-  // TODO: for each one, fetchTrafficData
-  // TODO: calculateCongestionScore
-  // TODO: writeToSupabase
-  // TODO: return a summary of what was collected
-  for (const intersection of INTERSECTIONS) {
-    const reading = fetchTrafficData(intersection);
-    writeToSupabase(reading)
+  try {
+    for (const intersection of INTERSECTIONS) {
+      const reading = await fetchTrafficData(intersection);
+      await writeToSupabase(reading);
+    }
+    res.status(200).json({ status: 'ok', message: `Collected ${INTERSECTIONS.length} readings` });
+  } catch (err) {
+    res.status(500).json({ status: 'error', message: err.message });
   }
 }
