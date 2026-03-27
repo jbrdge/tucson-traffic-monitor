@@ -30,7 +30,8 @@ async function fetchTrafficData(intersection) {
       const { currentSpeed, freeFlowSpeed } = result.flowSegmentData
       return { name: intersection.name, currentSpeed, freeFlowSpeed} 
   } catch (error) {
-    console.error(error.message);
+      console.error(`Failed to fetch ${intersection.name}: ${error.message}`);
+      return null; // return null instead of undefined
   }
 }
 
@@ -56,6 +57,7 @@ export default async function handler(req, res) {
   try {
     for (const intersection of INTERSECTIONS) {
       const reading = await fetchTrafficData(intersection);
+      if (!reading) continue; // skip this intersection if fetch failed
       await writeToSupabase(reading);
     }
     res.status(200).json({ status: 'ok', message: `Collected ${INTERSECTIONS.length} readings` });
