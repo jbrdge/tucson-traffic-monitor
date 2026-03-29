@@ -1,5 +1,15 @@
 // imports
 import { useState, useEffect } from 'react';
+import { MapContainer, TileLayer, Circle, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+
+function getCongestionColor(congestion_score) {
+  if (congestion_score < 0.5) return 'red';
+  else if (congestion_score < 0.7) return 'yellow';
+  else return 'green';
+}
+
+
 
 function App() {
 
@@ -7,6 +17,8 @@ function App() {
   const [trafficData, setTrafficData] = useState([]);
   // state for loading
   const [loading, setLoading] = useState(true);
+
+
   
   useEffect(() => {
     async function fetchTraffic(){
@@ -21,13 +33,43 @@ function App() {
     fetchTraffic();
   }, []);
 
-  return (
-    <div>
-      {/* map goes here */}
-      <h1>Tucson Traffic Monitor App</h1>
-      <p>Coming soon...</p>
-    </div>
-  )
+return (
+  <div style={{ height: '100vh', width: '100%' }}>
+    {loading ? (
+      <p>Loading...</p>
+    ) : (
+      <MapContainer
+        center={[32.2541, -110.9742]}
+        zoom={11}
+        style={{ height: '100%', width: '100%' }}
+      >
+        <TileLayer
+          attribution='&copy; OpenStreetMap contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        {trafficData.map((intersection) => (
+          <Circle
+            key={intersection.intersection}
+            center={[intersection.lat, intersection.lng]}
+            radius={200}
+            pathOptions={{
+              color: getCongestionColor(intersection.congestion_score),
+              fillColor: getCongestionColor(intersection.congestion_score),
+              fillOpacity: 0.5,
+            }}
+          >
+            <Popup>
+              <b>{intersection.intersection}</b><br />
+              Congestion: {intersection.congestion_score}<br />
+              Current Speed: {Math.round(intersection.current_speed * 0.621371)} mph<br />
+              Free Flow: {Math.round(intersection.free_flow_speed * 0.621371)} mph
+            </Popup>
+          </Circle>
+        ))}
+      </MapContainer>
+    )}
+  </div>
+);
 }
 
 export default App;

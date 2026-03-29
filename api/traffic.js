@@ -24,18 +24,21 @@ async function getFromSupabase(intersection) {
 
 
 export default async function handler(req, res) {
-    const results = [];
-    try {
-        for (const intersection of INTERSECTIONS) {
-            const reading = await getFromSupabase(intersection);
-            if (reading) {
-            reading.lat = intersection.lat;
-            reading.lng = intersection.lng;
-            results.push(reading);
-            }
-        }
-        res.status(200).json(results);
-    } catch (err) {
-        res.status(500).json({ status: 'error', message: err.message });
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET');
+  
+  const results = [];
+  try {
+    for (const intersection of INTERSECTIONS) {
+      const reading = await getFromSupabase(intersection);
+      if (reading) {
+        reading.lat = intersection.lat;
+        reading.lng = intersection.lng;
+        results.push(reading);
+      }
     }
+    res.status(200).json(results);
+  } catch (err) {
+    res.status(500).json({ status: 'error', message: err.message });
+  }
 }
