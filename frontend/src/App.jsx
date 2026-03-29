@@ -34,42 +34,67 @@ function App() {
   }, []);
 
 return (
-  <div style={{ height: '100vh', width: '100%' }}>
+  <div style={{ height: '100vh', width: '100%', position: 'relative' }}>
     {loading ? (
       <p>Loading...</p>
     ) : (
-      <MapContainer
-        center={[32.2541, -110.9742]}
-        zoom={11}
-        style={{ height: '100%', width: '100%' }}
-      >
-        <TileLayer
-          attribution='&copy; OpenStreetMap contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {trafficData.map((intersection) => (
-          <Circle
-            key={intersection.intersection}
-            center={[intersection.lat, intersection.lng]}
-            radius={200}
-            pathOptions={{
-              color: getCongestionColor(intersection.congestion_score),
-              fillColor: getCongestionColor(intersection.congestion_score),
-              fillOpacity: 0.5,
-            }}
-          >
-            <Popup>
-              <b>{intersection.intersection}</b><br />
-              Congestion: {intersection.congestion_score}<br />
-              Current Speed: {Math.round(intersection.current_speed * 0.621371)} mph<br />
-              Free Flow: {Math.round(intersection.free_flow_speed * 0.621371)} mph
-            </Popup>
-          </Circle>
-        ))}
-      </MapContainer>
+      <>
+        {/* Info Panel */}
+        <div style={{
+          position: 'absolute', top: 16, right: 16, zIndex: 1000,
+          background: 'white', padding: '12px 16px', borderRadius: 8,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.2)', minWidth: 220,
+          maxHeight: '80vh', overflowY: 'auto'
+        }}>
+          <h3 style={{ margin: '0 0 12px 0', fontSize: 14 }}>Tucson Intersections</h3>
+          {trafficData.map((intersection) => (
+            <div key={intersection.intersection} style={{
+              display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8
+            }}>
+              <div style={{
+                width: 12, height: 12, borderRadius: '50%',
+                background: getCongestionColor(intersection.congestion_score),
+                flexShrink: 0
+              }} />
+              <span style={{ fontSize: 12 }}>{intersection.intersection}</span>
+            </div>
+          ))}
+        </div>
+
+        <MapContainer
+          center={[32.2541, -110.9742]}
+          zoom={11}
+          style={{ height: '100vh', width: '100%' }}
+        >
+          <TileLayer
+            attribution='&copy; OpenStreetMap contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {trafficData.map((intersection) => (
+            <Circle
+              key={intersection.intersection}
+              center={[intersection.lat, intersection.lng]}
+              radius={800}
+              pathOptions={{
+                color: getCongestionColor(intersection.congestion_score),
+                fillColor: getCongestionColor(intersection.congestion_score),
+                fillOpacity: 0.5,
+              }}
+            >
+              <Popup>
+                <b>{intersection.intersection}</b><br />
+                Congestion: {intersection.congestion_score}<br />
+                Current Speed: {Math.round(intersection.current_speed * 0.621371)} mph<br />
+                Free Flow: {Math.round(intersection.free_flow_speed * 0.621371)} mph
+              </Popup>
+            </Circle>
+          ))}
+        </MapContainer>
+      </>
     )}
   </div>
 );
+
 }
 
 export default App;
