@@ -2,6 +2,9 @@
 import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Circle, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import './App.css';
+
+
 
 function getCongestionColor(congestion_score) {
   if (congestion_score < 0.5) return 'red';
@@ -12,12 +15,12 @@ function getCongestionColor(congestion_score) {
 
 
 function App() {
-
   // state for traffic data
   const [trafficData, setTrafficData] = useState([]);
   // state for loading
   const [loading, setLoading] = useState(true);
-
+  // state of hamburger menu
+  const [isListOpen, setIsListOpen] = useState(false);
 
   
   useEffect(() => {
@@ -34,31 +37,30 @@ function App() {
   }, []);
 
 return (
-  <div style={{ height: '100vh', width: '100%', position: 'relative' }}>
+  <div className="app-container">
     {loading ? (
       <p>Loading...</p>
     ) : (
       <>
         {/* Info Panel */}
-        <div style={{
-          position: 'absolute', top: 16, right: 16, zIndex: 1000,
-          background: 'white', padding: '12px 16px', borderRadius: 8,
-          boxShadow: '0 2px 8px rgba(0,0,0,0.2)', minWidth: 220,
-          maxHeight: '80vh', overflowY: 'auto'
-        }}>
-          <h3 style={{ margin: '0 0 12px 0', fontSize: 14 }}>Tucson Intersections</h3>
-          {trafficData.map((intersection) => (
-            <div key={intersection.intersection} style={{
-              display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8
-            }}>
-              <div style={{
-                width: 12, height: 12, borderRadius: '50%',
-                background: getCongestionColor(intersection.congestion_score),
-                flexShrink: 0
-              }} />
-              <span style={{ fontSize: 12 }}>{intersection.intersection}</span>
-            </div>
-          ))}
+        <div className="intersection-menu">
+          <h3 className="menu-title">Tucson Intersections
+            <button className="toggle-button" onClick={() => setIsListOpen(!isListOpen)}>
+              {isListOpen ? '✕' : '☰'}
+            </button>
+          </h3>
+        {isListOpen ? //if hamburger is open, then show this below:
+            trafficData.map((intersection) => (
+              <div key={intersection.intersection} className='list-style'>
+              <div
+                className='list-indicator' 
+                style={{ background: getCongestionColor(intersection.congestion_score) }}  
+              />
+              <span className='list-item'>{intersection.intersection}</span>
+              </div>
+          ))
+          : null //display nothing if hamburger is not open
+        }
         </div>
 
         <MapContainer
