@@ -1,41 +1,27 @@
 import { createClient } from '@supabase/supabase-js';
-import { INTERSECTIONS } from './intersections.js';
-
 
 const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
 );
-
-async function getFromSupabase(intersection) {
-    // call 
-    const { data, error } =  await supabase 
-    .from('get_intersection_history(instersection)') 
-    .select('*') // which columns 
-
-
-    if (error) throw new Error(`Supabase error: ${error.message}`);
-    return data[0]; // data is an array, you want the first (most recent) row
-
-}
-
-
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
-  
-  const results = [];
+
+  const name = req.query.intersection;
+
+  if (!name) {
+    return res.status(400).json({ error: 'intersection parameter is required' });
+  }
+
   try {
-    for (const intersection of INTERSECTIONS) {
-      const reading = await getFromSupabase(intersection);
-      if (reading) {
-        reading.lat = intersection.lat;
-        reading.lng = intersection.lng;
-        results.push(reading);
-      }
-    }
-    res.status(200).json(results);
+    const { data, error } = await supabase
+      .rpc('get_intersection_history', { intersection_name: name });
+
+    if (error) throw new Error(`Supabase error: ${error.message}`);
+
+    res.status(200).json(data);
   } catch (err) {
     res.status(500).json({ status: 'error', message: err.message });
   }
