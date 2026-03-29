@@ -29,6 +29,8 @@ export default async function handler(req, res) {
         for (const intersection of INTERSECTIONS) {
             const reading = await getFromSupabase(intersection);
             if (reading) {
+            reading.lat = intersection.lat;
+            reading.lng = intersection.lng;
             results.push(reading);
             }
         }
