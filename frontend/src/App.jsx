@@ -51,7 +51,6 @@ return (
           trafficData.map((item) => (
             <div 
               key={item.intersection}
-              id={item.intersection}
               className='intersection-list'
               onClick={() => setIsListOpen(!isListOpen)}
             >
