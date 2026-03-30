@@ -52,7 +52,6 @@ return (
             <div 
               key={item.intersection}
               className='intersection-list'
-              onClick={() => setIsListOpen(!isListOpen)}
             >
               <div
                 className='list-indicator' 
