@@ -12,7 +12,16 @@ function getCongestionColor(congestion_score) {
   else return 'green';
 }
 
+function onMouseOverIntersection(intersection_name){
+  console.log(intersection_name);
+  document.getElementById(intersection_name).style.backgroundColor = '#9e9e9e';
+  document.getElementById(intersection_name).style.color = "white";
+}
 
+function onMouseOutIntersection(intersection_name){
+  document.getElementById(intersection_name).style.backgroundColor = "white";
+  document.getElementById(intersection_name).style.color = "black";
+}
 
 function App() {
   // state for traffic data
@@ -50,14 +59,21 @@ return (
             </button>
           </h3>
         {isListOpen ? //if hamburger is open, then show this below:
-            trafficData.map((intersection) => (
-              <div key={intersection.intersection} className='list-style'>
+          trafficData.map((item) => (
+            <div 
+              key={item.intersection}
+              id={item.intersection}
+              className='intersection-list'
+              onClick={() => setIsListOpen(!isListOpen)}
+              onMouseOver={() => onMouseOverIntersection(item.intersection)}
+              onMouseOut={() => onMouseOutIntersection(item.intersection)}
+            >
               <div
                 className='list-indicator' 
-                style={{ background: getCongestionColor(intersection.congestion_score) }}  
+                style={{ background: getCongestionColor(item.congestion_score) }}  
               />
-              <span className='list-item'>{intersection.intersection}</span>
-              </div>
+              <span className='list-item'>{item.intersection}</span>
+            </div>
           ))
           : null //display nothing if hamburger is not open
         }
