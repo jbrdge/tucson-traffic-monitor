@@ -12,17 +12,6 @@ function getCongestionColor(congestion_score) {
   else return 'green';
 }
 
-function onMouseOverIntersection(intersection_name){
-  console.log(intersection_name);
-  document.getElementById(intersection_name).style.backgroundColor = '#9e9e9e';
-  document.getElementById(intersection_name).style.color = "white";
-}
-
-function onMouseOutIntersection(intersection_name){
-  document.getElementById(intersection_name).style.backgroundColor = "white";
-  document.getElementById(intersection_name).style.color = "black";
-}
-
 function App() {
   // state for traffic data
   const [trafficData, setTrafficData] = useState([]);
@@ -65,8 +54,6 @@ return (
               id={item.intersection}
               className='intersection-list'
               onClick={() => setIsListOpen(!isListOpen)}
-              onMouseOver={() => onMouseOverIntersection(item.intersection)}
-              onMouseOut={() => onMouseOutIntersection(item.intersection)}
             >
               <div
                 className='list-indicator' 
