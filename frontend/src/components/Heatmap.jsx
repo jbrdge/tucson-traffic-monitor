@@ -64,37 +64,8 @@ function Heatmap({ intersection }) {
   const grid = buildGrid(historyData);
 
   return (
-    <div className="heatmap-container">
-      <h3 className="heatmap-title">{intersection}</h3>
-      {loading ? (
-        <p>Loading history...</p>
-      ) : (
-        <div className="heatmap-grid">
-          {/* grid is a 7-element array (one per day).
-              .map() loops through each day, giving us:
-              - daySlots: the array of 96 time slots for that day
-              - dayIndex: the position (0=Sunday, 1=Monday... 6=Saturday) */}
-          {grid.map((daySlots, dayIndex) => (
-            <div key={dayIndex} className="heatmap-row">
-              {/* DAYS[dayIndex] converts the number into a readable day label */}
-              <span className="heatmap-day-label">{DAYS[dayIndex]}</span>
-              {/* loop through the 96 slots for this day */}
-              {daySlots.map((slot, slotIndex) => (
-                <div
-                  key={slotIndex}
-                  className="heatmap-cell"
-                  style={{
-                    // color by congestion score or grey if no data
-                    backgroundColor: slot ? getHeatmapColor(slot.avg_congestion) : '#e0e0e0'
-                  }}
-                  // tooltip on hover showing raw values
-                  title={slot ? `${slot.avg_congestion.toFixed(2)} (${slot.sample_count} samples)` : 'No data'}
-                />
-              ))}
-            </div>
-          ))}
-        </div>
-      )}
+    <div style={{ background: 'red', height: '200px', width: '100%' }}>
+      <h1>HEATMAP: {intersection}</h1>
     </div>
   );
 }

@@ -53,11 +53,11 @@ function App() {
   console.log('selectedIntersection:', selectedIntersection);
   console.log('trafficData length:', trafficData.length);
   return (
-    <div className="app-container">
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
+  <div className="app-container" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    {loading ? (
+      <p>Loading...</p>
+    ) : (
+      <>
           {/* Info Panel */}
           <div className="intersection-menu">
             <h3 className="menu-title">Tucson Intersections
@@ -93,7 +93,10 @@ function App() {
           <MapContainer
             center={[32.2541, -110.9742]}
             zoom={11}
-            style={{ height: selectedIntersection ? '60vh' : '100vh', width: '100%' }}
+            style={{ 
+              flex: selectedIntersection ? '0 0 60vh' : '1', 
+              width: '100%' 
+          }}
           >
             <TileLayer
               attribution='&copy; OpenStreetMap contributors'
