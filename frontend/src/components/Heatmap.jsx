@@ -7,20 +7,39 @@ return (
       <p>Loading history...</p>
     ) : (
       <div className="heatmap-grid">
-        {/* TODO: loop through the 7 days in the grid
-            each iteration gives us the day's slots array and the day index */}
-          {/* TODO: render a row for each day */}
+        {/* grid is a 7-element array (one per day).
+            .map() loops through each day, giving us:
+            - daySlots: the array of 96 time slots for that day
+            - dayIndex: the position (0=Sunday, 1=Monday... 6=Saturday) */}
+        {grid.map((daySlots, dayIndex) => (
+          <div key={dayIndex} className="heatmap-row">
 
-              {/* TODO: use the day index to look up the day name from the DAYS array
-                  and display it as a label on the left */}
+            {/* DAYS[dayIndex] uses dayIndex as a lookup into the DAYS array.
+                dayIndex=0 → DAYS[0] → 'Sun'
+                dayIndex=1 → DAYS[1] → 'Mon'
+                dayIndex=5 → DAYS[5] → 'Fri'
+                This converts the number into a readable day label */}
+            <span className="heatmap-day-label">{DAYS[dayIndex]}</span>
 
-              {/* TODO: loop through the 96 time slots for this day
-                  each iteration gives us the slot data and the slot index */}
-
-                  {/* TODO: render a cell for each time slot
-                      if the slot has data, color it using getHeatmapColor
-                      if the slot is null (no data yet), use grey
-                      add a tooltip showing the raw congestion value and sample count */}
+            {/* daySlots is the array of 96 slots for this day.
+                .map() loops through each slot, giving us:
+                - slot: either null (no data) or { avg_congestion, sample_count }
+                - slotIndex: position 0-95 representing each 15-minute window */}
+            {daySlots.map((slot, slotIndex) => (
+              <div
+                key={slotIndex}
+                className="heatmap-cell"
+                style={{
+                  // if slot has data, color it by congestion score
+                  // if slot is null (no data collected yet), use grey
+                  backgroundColor: slot ? getHeatmapColor(slot.avg_congestion) : '#e0e0e0'
+                }}
+                // tooltip on hover showing the raw values
+                title={slot ? `${slot.avg_congestion.toFixed(2)} (${slot.sample_count} samples)` : 'No data'}
+              />
+            ))}
+          </div>
+        ))}
       </div>
     )}
   </div>
