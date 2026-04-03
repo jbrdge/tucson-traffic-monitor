@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Circle, Popup } from 'react-leaflet';
 import { useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import './App.css';
+import Heatmap from './components/Heatmap';
 
 
 
@@ -128,7 +129,9 @@ return (
         </MapContainer>
       </>
     )}
+    {selectedIntersection && <Heatmap intersection={selectedIntersection} />} 
   </div>
+  
 );
 
 }
