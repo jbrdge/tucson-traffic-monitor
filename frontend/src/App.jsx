@@ -50,8 +50,9 @@ function App() {
     }
     fetchTraffic();
   }, []);
-  console.log('selectedIntersection:', selectedIntersection);
-  console.log('trafficData length:', trafficData.length);
+  // useful test logs:
+  // console.log('selectedIntersection:', selectedIntersection);
+  // console.log('trafficData length:', trafficData.length);
   return (
   <div className="app-container" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
     {loading ? (
