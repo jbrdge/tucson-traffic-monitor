@@ -1,0 +1,75 @@
+.heatmap-container {
+  padding: 12px 16px;
+  background: white;
+  border-top: 1px solid #eee;
+  height: 40vh;
+  overflow-y: auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.heatmap-title {
+  font-size: 13px;
+  margin: 0 0 8px 0;
+}
+
+.heatmap-time-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.heatmap-time-labels {
+  flex: 1;
+  position: relative;
+  height: 16px;
+}
+
+.heatmap-time-label {
+  position: absolute;
+  font-size: 10px;
+  color: #888;
+  transform: translateX(0);
+}
+
+
+
+.heatmap-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+}
+
+.heatmap-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.heatmap-day-label {
+  font-size: 11px;
+  width: 28px;
+  flex-shrink: 0;
+}
+
+.heatmap-cells-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.heatmap-cell {
+  height: 14px;
+  flex: 1;
+  border-radius: 1px;
+  min-width: 0;
+  position: relative;
+}
+
+.heatmap-hour-gap {
+  width: 2px;
+  height: 14px;
+  background: white;
+  flex-shrink: 0;
+}
